@@ -1,31 +1,38 @@
 <?php get_header(); ?>
-  <div id="main" class="container">
-    <div id="posts">
 
+<div class="MainVisual" style="background-image:url('../../images/mediamock/top.jpg')">
+  <h1 class="MainVisual__title">
+    <a href="<?php echo home_url('/') ?>"><?php echo bloginfo('name') ?></a>
+  </h1>
+</div>
+
+<?php wp_nav_menu([
+  'menu_class' => 'CategoryNavigation',
+  'conteiner' => false
+]); ?>
+
+<ul class="CellList">
 <?php
 if(have_posts()):
   while(have_posts()):
     the_post();
 ?>
-      <div clsss="post">
-        <div class="post-header">
-          <h2>
-            <a href="<?php the_permalink() ?>"><?php the_title(); ?></a>
-          </h2>
-          <div class="post-meta">
-            <?php echo get_the_date();?>【<?php the_category(', ') ?>】
-          </div>
-          <div class="post-content">
-            <div class="post-image">
-              <img src="./img/noimage.png" alt="" width="100" height="100">
-            </div>
-            <div class="post-body">
-              <?php the_excerpt(); ?>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- /.post -->
+
+<li class="Cell">
+  <a href="<?php the_permalink(); ?>">
+    <?php if (has_post_thumbnail()) { ?>
+    <div class="Cell__thumbNail" style="background-image:url('<?php echo wp_get_attachment_image_src(get_post_thumbnail_id(), 'thumbnail')[0] ?>')"></div>
+    <?php } else { ?>
+    <div class="Cell__thumbNail" style="background-color: #666"></div><!-- TODO -->
+    <?php } ?>
+    <div class="Cell__main">
+      <?php get_categories_label(false, 'Cell__category') ?>
+      <p class="Cell__title"><?php the_title(); ?></p>
+      <p class="Cell__date"><?php echo get_the_date();?></p>
+    </div>
+  </a>
+  <?php the_tags( '<ul class="Cell__tags"><li>', '</li><li>', '</li></ul>' ); ?>
+</li>
 
 <?php
   endwhile;
@@ -36,13 +43,7 @@ else:
 endif;
 ?>
 
-      <div class="navigation">
-        <div class="prev">prev</div>
-        <div class="next">next</div>
-      </div>
-    </div>
-    <!-- /#posts -->
-<?php get_sidebar(); ?>
-  </div>
-  <!-- /#main.container -->
+</ul>
+<!-- /.CellList -->
+
 <?php get_footer(); ?>

@@ -1,6 +1,14 @@
-<div id="footer" class="container">
-  footer
+      <div class="Footer">
+        <p>©<?php echo date('Y'); ?> Sentogurashi</p>
+      </div>
+      <!-- /.Footer -->
+    </div>
+    <!-- /.Main -->
+  </div>
+  <!-- /.Column -->
 </div>
-<!-- /#footer.container -->
+<!-- /.Content -->
+
+<?php wp_footer() ?>
 </body>
 </html>
