@@ -9,6 +9,10 @@ if(have_posts()):
 <?php if (has_post_thumbnail()) { ?>
   <div class="Article__photoWrapper">
     <div class="Article__photoMain js-Article__photoMain" style="background-image:url('<?php echo wp_get_attachment_image_src(get_post_thumbnail_id(), 'large')[0] ?>')"></div>
+    <?php
+    for ($i = 0; $i < 3 ; $i++) { ?>
+      <canvas class="Wave__canvas Wave__canvas--<?php echo $i+1 ?> js-Wave__canvas--<?php echo $i+1 ?>"></canvas>
+    <?php } ?>
   </div>
 <?php } ?>
   <div class="Article__inner">
@@ -33,22 +37,30 @@ if(have_posts()):
         <p class="Profile__nameJp"><?php echo get_the_author_meta('last_name') . ' ' . get_the_author_meta('first_name'); ?></p>
         <div class="Profile__nameSub">
           <p class="Profile__nameEn"><?php echo strtoupper(get_the_author_meta('last_name_en') . ' ' . get_the_author_meta('first_name_en')); ?></p>
-          <p class="Profile__title">ライター</p>
+          <p class="Profile__job"><?php the_author_meta('job') ?></p>
         </div>
         <p class="Profile__text"><?php the_author_meta('user_description') ?></p>
         <ul class="Profile__links">
+<?php if(get_the_author_meta('user_url')) { ?>
           <li class="Profile__link Profile__link--web">
             <a href="<?php the_author_meta('user_url') ?>" target="_blank">ウェブサイト</a>
           </li>
+<?php }
+if(get_the_author_meta('twitter')) { ?>
           <li class="Profile__link Profile__link--twitter">
             <a href="<?php the_author_meta('twitter') ?>" target="_blank">twitter</a>
           </li>
+<?php }
+if(get_the_author_meta('facebook')) { ?>
           <li class="Profile__link Profile__link--facebook">
             <a href="<?php the_author_meta('facebook') ?>" target="_blank">facebook</a>
           </li>
+<?php }
+if(get_the_author_meta('instagram')) { ?>
           <li class="Profile__link Profile__link--instagram">
             <a href="<?php the_author_meta('instagram') ?>" target="_blank">instagram</a>
           </li>
+<?php } ?>
         </ul>
       </div>
     </section>
@@ -59,4 +71,5 @@ if(have_posts()):
   endwhile;
 endif;
 ?>
+<?php wp_enqueue_script('article-index-js', get_template_directory_uri() . '/static/scripts/article-detail.bundle.js'); ?>
 <?php get_footer() ?>

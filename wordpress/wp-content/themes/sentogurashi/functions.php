@@ -2,6 +2,8 @@
 
 // 管理バー非表示
 add_filter('show_admin_bar', '__return_false');
+// 自動pタグ挿入をoff
+remove_filter('the_content', 'wpautop');
 
 /* ------------
   base
@@ -10,14 +12,15 @@ add_filter('show_admin_bar', '__return_false');
 // staticファイルを読み込む
 // http://rfs.jp/sb/wordpress/wp-lab/wp_enqueue_script.html
 function add_static_files() {
-// WordPress提供のjquery.jsを読み込まない
-// wp_deregister_script('jquery');
-// jQueryの読み込み
-// wp_enqueue_script( 'jquery', '//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js', "", "20160608", false );
-// サイト共通JS
-//wp_enqueue_script( 'smart-script', get_template_directory_uri() . '/js/main.js', array( 'jquery' ), '20160608', true );
-// CSSの読み込み
-// TODO: あとでcommon参照変える
+  // WordPress提供のjquery.jsを読み込まない
+  wp_deregister_script('jquery');
+  // 絶対パスJS読み込み
+  wp_enqueue_script( 'jquery', '//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js');
+  wp_enqueue_script( 'theme-common', '//www.sentogurashi.com/assets/scripts/common.bundle.js');
+  // サイト共通JS
+  //wp_enqueue_script( 'smart-script', get_template_directory_uri() . '/js/main.js', array( 'jquery' ), '20160608', true );
+  // CSSの読み込み
+  // TODO: あとでcommon参照変える
   wp_enqueue_style( 'theme-common', get_template_directory_uri() . '/static/styles/common.css');
   wp_enqueue_style( 'article', get_template_directory_uri() . '/static/styles/article.css');
   wp_enqueue_style( 'main', get_stylesheet_uri());
@@ -76,6 +79,7 @@ function custom_contactmethods( $contactmethods ) {
   $contactmethods['instagram'] = 'Instagram';
   $contactmethods['first_name_en'] = '名前（アルファベット）';
   $contactmethods['last_name_en'] = '名字（アルファベット）';
+  $contactmethods['job'] = '肩書き';
   return $contactmethods;
 }
 add_filter('user_contactmethods','custom_contactmethods',10,1);

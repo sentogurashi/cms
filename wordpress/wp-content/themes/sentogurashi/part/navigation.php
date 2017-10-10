@@ -1,8 +1,8 @@
 <div class="Navigation Navigation--pc">
   <a href="/" class="Navigation__sitelogo">銭湯ぐらし</a>
   <ul class="Navigation__main">
+    <li><a href="/article">読みもの</a></li>
     <li><a href="/about/project.html">銭湯ぐらしとは</a></li>
-    <li><a href="/about/project.html">読みモノ</a></li>
   </ul>
   <div class="Navigation__bottom">
 <ul class="Navigation__sub">
@@ -26,8 +26,8 @@
 <div class="Navigation Navigation--sp js-Navigation--sp">
   <a href="/" class="Navigation__sitelogo">銭湯ぐらし</a>
   <ul class="Navigation__main">
+    <li><a href="/article">読みもの</a></li>
     <li><a href="/about/project.html">銭湯ぐらしとは</a></li>
-    <li><a href="/about/project.html">読みモノ</a></li>
   </ul>
 <ul class="Navigation__sub">
   <li><a href="/about/kosugiyu.html">小杉湯</a></li>

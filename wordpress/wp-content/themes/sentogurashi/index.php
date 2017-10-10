@@ -1,9 +1,13 @@
 <?php get_header(); ?>
 
-<div class="MainVisual" style="background-image:url('../../images/mediamock/top.jpg')">
+<div class="MainVisual" style="background-image:url('<?php echo get_template_directory_uri(); ?>/static/images/mediamock/top.jpg')">
   <h1 class="MainVisual__title">
     <a href="<?php echo home_url('/') ?>"><?php echo bloginfo('name') ?></a>
   </h1>
+<?php
+for ($i = 0; $i < 3 ; $i++) { ?>
+  <canvas class="Wave__canvas Wave__canvas--<?php echo $i+1 ?> js-Wave__canvas--<?php echo $i+1 ?>"></canvas>
+<?php } ?>
 </div>
 
 <?php wp_nav_menu([
@@ -23,7 +27,7 @@ if(have_posts()):
     <?php if (has_post_thumbnail()) { ?>
     <div class="Cell__thumbNail" style="background-image:url('<?php echo wp_get_attachment_image_src(get_post_thumbnail_id(), 'thumbnail')[0] ?>')"></div>
     <?php } else { ?>
-    <div class="Cell__thumbNail" style="background-color: #666"></div><!-- TODO -->
+    <div class="Cell__thumbNail" style="background-image: linear-gradient(45deg, #a00adb 0%,#00e58d 100%);"></div><!-- TODO -->
     <?php } ?>
     <div class="Cell__main">
       <?php get_categories_label(false, 'Cell__category') ?>
@@ -45,5 +49,5 @@ endif;
 
 </ul>
 <!-- /.CellList -->
-
+<?php wp_enqueue_script('article-index-js', get_template_directory_uri() . '/static/scripts/article-index.bundle.js'); ?>
 <?php get_footer(); ?>
