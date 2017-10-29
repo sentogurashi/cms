@@ -1,9 +1,5 @@
 <?php
-
-// 管理バー非表示
-add_filter('show_admin_bar', '__return_false');
-// 自動pタグ挿入をoff
-remove_filter('the_content', 'wpautop');
+$static_assets_path = 'http://www.sentogurashi.com/assets/';
 
 /* ------------
   base
@@ -12,18 +8,16 @@ remove_filter('the_content', 'wpautop');
 // staticファイルを読み込む
 // http://rfs.jp/sb/wordpress/wp-lab/wp_enqueue_script.html
 function add_static_files() {
+  global $static_assets_path;
   // WordPress提供のjquery.jsを読み込まない
   wp_deregister_script('jquery');
   // 絶対パスJS読み込み
   wp_enqueue_script( 'jquery', '//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js');
-  wp_enqueue_script( 'theme-common', '//www.sentogurashi.com/assets/scripts/common.bundle.js');
-  // サイト共通JS
-  //wp_enqueue_script( 'smart-script', get_template_directory_uri() . '/js/main.js', array( 'jquery' ), '20160608', true );
+  wp_enqueue_script( 'theme-common', $static_assets_path . 'scripts/common.bundle.js');
   // CSSの読み込み
-  // TODO: あとでcommon参照変える
-  wp_enqueue_style( 'theme-common', get_template_directory_uri() . '/static/styles/common.css');
-  wp_enqueue_style( 'article', get_template_directory_uri() . '/static/styles/article.css');
-  wp_enqueue_style( 'main', get_stylesheet_uri());
+  wp_enqueue_style( 'theme-common', $static_assets_path . 'styles/common.css');
+  wp_enqueue_style( 'article',  $static_assets_path . 'styles/article.css');
+  // wp_enqueue_style( 'main', get_stylesheet_uri());
 }
 add_action('wp_enqueue_scripts', 'add_static_files');
 
@@ -43,13 +37,44 @@ add_action('after_setup_theme', 'theme_setup');
 /* ------------
   shortcode
  ------------ */
+// 画像ラッパー
 function image_wrap($atts, $content) {
+
   extract(shortcode_atts([
     'caption' => ''
   ], $atts));
-  return '<div class="Article__innerImage">' . $content . '<cite class="Article__caption">' . esc_html($caption) . '</cite></div>';
+
+  $wrapped_tag = '<div class="Article__innerImage">' . $content;
+
+  if($caption !== '') {
+    $wrapped_tag .= '<cite class="Article__caption">' . esc_html($caption) . '</cite>';
+  }
+
+  $wrapped_tag .= '</div>';
+
+  return $wrapped_tag;
 }
 add_shortcode('image_wrap', 'image_wrap');
+
+/* ------------
+  disables
+ ------------ */
+
+// 絵文字対応off
+// http://hayashikejinan.com/wordpress/1240/
+remove_action( 'wp_head', 'print_emoji_detection_script', 7);
+remove_action( 'wp_print_styles', 'print_emoji_styles', 10);
+
+// 管理バー非表示
+add_filter('show_admin_bar', '__return_false');
+// 自動pタグ挿入をoff
+remove_filter('the_content', 'wpautop');
+
+// 余計なヘッダ情報の刈り取り
+// https://wp-setting.info/setting/remove_header_edituri_wlwmanifest.html
+remove_action('wp_head', 'wp_generator');
+remove_action('wp_head', 'rsd_link');
+remove_action('wp_head', 'wlwmanifest_link');
 
 /* ------------
   filter
@@ -59,7 +84,8 @@ add_shortcode('image_wrap', 'image_wrap');
 // https://memocarilog.info/wordpress/6514
 function remove_to_activeClass($classes, $item) {
     $classes = array();
-    if( $item -> current == true ) {
+    $classes[] = 'CategoryNavigation__item';
+    if( $item -> current === true ) {
         $classes[] = 'is-active';
     }
     return $classes;
@@ -83,6 +109,7 @@ function custom_contactmethods( $contactmethods ) {
   return $contactmethods;
 }
 add_filter('user_contactmethods','custom_contactmethods',10,1);
+
 
 /* ------------
   utility
@@ -115,4 +142,35 @@ function get_wp_user_avatar_url($id_or_email, $size = null, $default = null, $al
     } else {
         return false;
     }
+}
+
+// descriptionの抽出
+// http://easyramble.com/wordpress-meta-description.html
+function get_meta_description() {
+  global $post;
+  $description = '';
+  if (is_home()) {
+    // ホームでは、ブログの説明文を取得
+    $description = get_bloginfo('description');
+  }
+  else if (is_category()) {
+    // カテゴリーページでは、カテゴリーの説明文を取得
+    $description = category_description();
+  }
+  else if (is_single()) {
+    /*
+    if ($post->post_excerpt) {
+      // 記事ページでは、記事本文から抜粋を取得
+      $description = $post->post_excerpt;
+    } else {
+    */
+    // post_excerpt で取れない時は、自力で記事の冒頭100文字を抜粋して取得
+    $description = strip_tags($post->post_content);
+    $description = str_replace("\n", '　', $description);
+    $description = str_replace("\r", '　', $description);
+    $description = mb_substr($description, 0, 100) . '…';
+    //}
+  }
+
+  return $description;
 }

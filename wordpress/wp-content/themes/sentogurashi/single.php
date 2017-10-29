@@ -21,7 +21,6 @@ if(have_posts()):
       <div class="Article__titleInfo">
         <?php get_categories_label(true, 'Article__titleCategory') ?>
         <p class="Article__titleDate"><?php echo get_the_date() ?></p>
-        <!-- <p class="Article__titleSeriesName"><a href="TOOD">連載:ほげほげ</a></p> -->
         <?php the_tags('<ul class="Article__titleTags"><li>', '</li><li>', '</li></ul>'); ?>
       </div>
     </div>
@@ -36,8 +35,10 @@ if(have_posts()):
         <div class="Profile__role">執筆</div>
         <p class="Profile__nameJp"><?php echo get_the_author_meta('last_name') . ' ' . get_the_author_meta('first_name'); ?></p>
         <div class="Profile__nameSub">
-          <p class="Profile__nameEn"><?php echo strtoupper(get_the_author_meta('last_name_en') . ' ' . get_the_author_meta('first_name_en')); ?></p>
+          <p class="Profile__nameEn"><?php echo strtoupper(get_the_author_meta('first_name_en') . ' ' . get_the_author_meta('last_name_en')); ?></p>
+<?php if(get_the_author_meta('job')) { ?>
           <p class="Profile__job"><?php the_author_meta('job') ?></p>
+<?php } ?>
         </div>
         <p class="Profile__text"><?php the_author_meta('user_description') ?></p>
         <ul class="Profile__links">
@@ -71,5 +72,5 @@ if(get_the_author_meta('instagram')) { ?>
   endwhile;
 endif;
 ?>
-<?php wp_enqueue_script('article-index-js', get_template_directory_uri() . '/static/scripts/article-detail.bundle.js'); ?>
+<?php wp_enqueue_script('article-index-js', $static_assets_path . 'scripts/article-detail.bundle.js'); ?>
 <?php get_footer() ?>
