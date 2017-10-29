@@ -44,7 +44,9 @@ if(have_posts()):
   endwhile;
 else:
 ?>
-<p>記事はありません</P>
+<div class="Notice">
+  <p class="Notice__text">記事はありません</p>
+</div>
 <?php
 endif;
 ?>
