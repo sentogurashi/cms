@@ -27,6 +27,7 @@ if(have_posts()):
     <section class="Article__main">
 <?php the_content() ?>
     </section>
+<?php get_template_part('part/share'); ?>
     <section class="Profile">
       <div class="Profile__column Profile__column--left">
         <div class="Profile__photo" style="background-image: url('<?php echo get_wp_user_avatar_url(get_the_author_meta('ID')) ?>')"></div>
