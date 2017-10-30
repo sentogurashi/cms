@@ -76,6 +76,34 @@ remove_action('wp_head', 'wp_generator');
 remove_action('wp_head', 'rsd_link');
 remove_action('wp_head', 'wlwmanifest_link');
 
+// エディタの自動整形機能をoff
+// https://qiita.com/jyokyoku/items/c560b0d1eacc1df61620
+// http://accelboon.com/tn/?p=701
+// 自動改行の無効化
+remove_filter('the_content', 'wpautop');
+remove_filter('the_excerpt', 'wpautop');
+// 引用符変換の無効化
+remove_filter('the_content', 'wptexturize');
+remove_filter('the_excerpt', 'wptexturize');
+// タグ変換の無効化
+remove_filter('the_content', 'convert_chars');
+remove_filter('the_excerpt', 'convert_chars');
+// ビジュアルエディタの自動変換を無効化
+function override_mce_options( $init_array ) {
+  global $allowedposttags;
+
+  $init_array['valid_elements']          = '*[*]';
+  $init_array['extended_valid_elements'] = '*[*]';
+  $init_array['valid_children']          = '+a[' . implode( '|', array_keys( $allowedposttags ) ) . ']';
+  $init_array['indent']                  = true;
+  $init_array['wpautop']                 = false;
+  $init_array['force_p_newlines']        = false;
+
+  return $init_array;
+}
+add_filter('tiny_mce_before_init', 'override_mce_options');
+
+
 /* ------------
   filter
  ------------ */
