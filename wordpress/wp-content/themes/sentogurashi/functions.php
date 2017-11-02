@@ -94,7 +94,7 @@ function override_mce_options( $init_array ) {
 
   $init_array['valid_elements']          = '*[*]';
   $init_array['extended_valid_elements'] = '*[*]';
-  $init_array['valid_children']          = '+a[' . implode( '|', array_keys( $allowedposttags ) ) . ']';
+  $init_array['valid_children']          = '+a[' . implode('|', array_keys($allowedposttags)) . ']';
   $init_array['indent']                  = true;
   $init_array['wpautop']                 = false;
   $init_array['force_p_newlines']        = false;
@@ -102,6 +102,16 @@ function override_mce_options( $init_array ) {
   return $init_array;
 }
 add_filter('tiny_mce_before_init', 'override_mce_options');
+
+//画像挿入時の不要アトリビュート削除
+// https://pg.kdtk.net/834
+add_filter('image_send_to_editor', 'remove_img_att');
+add_filter('post_thumbnail_html', 'remove_img_att');
+function remove_img_att($html){
+  $html = preg_replace('/(width|height)="\d*"\s/', '', $html);
+  $html = preg_replace('/class=[\'"]([^\'"]+)[\'"]/i', '', $html);
+  return $html;
+}
 
 
 /* ------------
