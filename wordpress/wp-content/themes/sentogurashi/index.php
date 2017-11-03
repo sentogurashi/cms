@@ -29,7 +29,7 @@ if(have_posts()):
     <?php if (has_post_thumbnail()) { ?>
     <div class="Cell__thumbNail" style="background-image:url('<?php echo wp_get_attachment_image_src(get_post_thumbnail_id(), 'thumbnail')[0] ?>')"></div>
     <?php } else { ?>
-    <div class="Cell__thumbNail" style="background-image: linear-gradient(45deg, #a00adb 0%,#00e58d 100%);"></div><!-- TODO -->
+    <div class="Cell__thumbNail Cell__thumbNail--noImage"></div>
     <?php } ?>
     <div class="Cell__main">
       <?php get_categories_label(false, 'Cell__category') ?>
