@@ -155,8 +155,8 @@ add_filter('user_contactmethods','custom_contactmethods',10,1);
 
 // カテゴリのラベル化
 // http://www.webopixel.net/wordpress/933.html
-function get_categories_label($isSetLink, $className) {
-    $categories = get_the_category();
+function get_categories_label($isSetLink, $className, $id = false) {
+    $categories = get_the_category($id);
     foreach($categories as $category){
         if($isSetLink) {
           echo '<a href="' . get_category_link($category->term_id) . '" class="' . $className . ' ' . $className . '--' . esc_attr($category->slug) . '">'. esc_html($category->name) . '</a>';
@@ -204,8 +204,9 @@ function get_meta_description() {
     */
     // post_excerpt で取れない時は、自力で記事の冒頭100文字を抜粋して取得
     $description = strip_tags($post->post_content);
-    $description = str_replace("\n", '　', $description);
-    $description = str_replace("\r", '　', $description);
+    $description = strip_shortcodes($description);
+    $description = str_replace("\n", '', $description);
+    $description = str_replace("\r", '', $description);
     $description = mb_substr($description, 0, 100) . '…';
     //}
   }

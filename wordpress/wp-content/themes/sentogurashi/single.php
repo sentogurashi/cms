@@ -1,5 +1,9 @@
-<?php get_header() ?>
 <?php
+get_header();
+
+require_once('logic/colorManager.php');
+$colorManager = new ColorManager();
+
 if(have_posts()):
   while(have_posts()):
     the_post();
@@ -19,59 +23,69 @@ if(have_posts()):
     <div class="Article__titleWrapper">
       <h1 class="Article__headingLv1"><?php the_title() ?></h1>
       <div class="Article__titleInfo">
-        <?php get_categories_label(true, 'Article__titleCategory') ?>
-        <p class="Article__titleDate"><?php echo get_the_date() ?></p>
+        <?php get_categories_label(true, 'Article__titleCategory'); ?>
+        <p class="Article__titleDate"><?php echo get_the_date(); ?></p>
         <?php the_tags('<ul class="Article__titleTags"><li>', '</li><li>', '</li></ul>'); ?>
       </div>
     </div>
     <section class="Article__main">
-<?php the_content() ?>
+<?php the_content(); ?>
     </section>
-<?php get_template_part('part/share'); ?>
-    <section class="Profile">
-      <div class="Profile__column Profile__column--left">
-        <div class="Profile__photo" style="background-image: url('<?php echo get_wp_user_avatar_url(get_the_author_meta('ID')) ?>')"></div>
-      </div>
-      <div class="Profile__column Profile__column--right">
-        <div class="Profile__role">執筆</div>
-        <p class="Profile__nameJp"><?php echo get_the_author_meta('last_name') . ' ' . get_the_author_meta('first_name'); ?></p>
-        <div class="Profile__nameSub">
-          <p class="Profile__nameEn"><?php echo strtoupper(get_the_author_meta('first_name_en') . ' ' . get_the_author_meta('last_name_en')); ?></p>
-<?php if(get_the_author_meta('job')) { ?>
-          <p class="Profile__job"><?php the_author_meta('job') ?></p>
-<?php } ?>
-        </div>
-        <p class="Profile__text"><?php the_author_meta('user_description') ?></p>
-        <ul class="Profile__links">
-<?php if(get_the_author_meta('user_url')) { ?>
-          <li class="Profile__link Profile__link--web">
-            <a href="<?php the_author_meta('user_url') ?>" target="_blank">ウェブサイト</a>
-          </li>
-<?php }
-if(get_the_author_meta('twitter')) { ?>
-          <li class="Profile__link Profile__link--twitter">
-            <a href="<?php the_author_meta('twitter') ?>" target="_blank">twitter</a>
-          </li>
-<?php }
-if(get_the_author_meta('facebook')) { ?>
-          <li class="Profile__link Profile__link--facebook">
-            <a href="<?php the_author_meta('facebook') ?>" target="_blank">facebook</a>
-          </li>
-<?php }
-if(get_the_author_meta('instagram')) { ?>
-          <li class="Profile__link Profile__link--instagram">
-            <a href="<?php the_author_meta('instagram') ?>" target="_blank">instagram</a>
-          </li>
-<?php } ?>
-        </ul>
-      </div>
-    </section>
+<?php
+get_template_part('part/share');
+get_template_part('part/profile');
+?>
   </div>
 </article>
 
 <?php
   endwhile;
 endif;
+
+$relatedArticles = get_field('related_articles');
+if ($relatedArticles): ?>
+<aside class="RelatedArticles">
+<h2 class="RelatedArticles__title">あわせて読みたい</h2>
+<ul class="CellList">
+<?php
+  foreach($relatedArticles as $id):
 ?>
+<li class="Cell">
+  <a href="<?php echo get_the_permalink($id); ?>">
+    <?php if (has_post_thumbnail($id)) { ?>
+    <div class="Cell__thumbNail" style="background-image:url('<?php echo get_the_post_thumbnail_url($id, 'thumbnail'); ?>')"></div>
+    <?php } else { ?>
+    <div class="Cell__thumbNail Cell__thumbNail--noImage" style="background-image: linear-gradient(45deg,<?php echo $colorManager->getRandomHexColor(); ?>  0%,<?php echo $colorManager->getRandomHexColor(); ?>  100%);"></div>
+    <?php } ?>
+    <div class="Cell__main">
+      <?php get_categories_label(false, 'Cell__category', $id); ?>
+      <p class="Cell__title"><?php echo get_the_title($id); ?></p>
+      <p class="Cell__date"><?php echo get_the_date(false, $id);?></p>
+    </div>
+  </a>
+  <?php
+  $tags = get_the_tags($id);
+  if ($tags):
+  ?>
+  <ul class="Cell__tags">
+  <?php
+    $tags = array_merge($tags, []);
+    foreach($tags as $tag):
+    ?>
+    <li>
+      <a href="<?php echo get_tag_link($tag->term_id); ?>"><?php echo $tag->name; ?></a>
+    </li>
+    <?php endforeach; ?>
+  </ul>
+  <?php endif; ?>
+</li>
+
+<?php endforeach; ?>
+</ul>
+<!-- /.CellList -->
+</aside>
+<!-- /.RelatedArticles -->
+<?php endif; ?>
+
 <?php wp_enqueue_script('article-index-js', $static_assets_path . 'scripts/article-detail.bundle.js'); ?>
 <?php get_footer() ?>
