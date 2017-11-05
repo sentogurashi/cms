@@ -1,4 +1,7 @@
-<?php get_header(); ?>
+<?php get_header();
+require_once('logic/colorManager.php');
+$colorManager = new ColorManager();
+?>
 
 <div class="MainVisual" style="background-image:url('<?php echo $static_assets_path ?>images/standalone/article/top.jpg')">
   <h1 class="MainVisual__title">
@@ -27,9 +30,9 @@ if(have_posts()):
 <li class="Cell">
   <a href="<?php the_permalink(); ?>">
     <?php if (has_post_thumbnail()) { ?>
-    <div class="Cell__thumbNail" style="background-image:url('<?php echo wp_get_attachment_image_src(get_post_thumbnail_id(), 'thumbnail')[0] ?>')"></div>
+    <div class="Cell__thumbNail" style="background-image:url('<?php echo get_the_post_thumbnail_url(false, 'thumbnail') ?>')"></div>
     <?php } else { ?>
-    <div class="Cell__thumbNail Cell__thumbNail--noImage"></div>
+    <div class="Cell__thumbNail Cell__thumbNail--noImage" style="background-image: linear-gradient(45deg,<?php echo $colorManager->getRandomHexColor(); ?>  0%,<?php echo $colorManager->getRandomHexColor(); ?>  100%);"></div>
     <?php } ?>
     <div class="Cell__main">
       <?php get_categories_label(false, 'Cell__category') ?>
@@ -50,9 +53,9 @@ else:
 <?php
 endif;
 ?>
-
 </ul>
 <!-- /.CellList -->
+
 <div class="SocialButtonContainer">
 <?php get_template_part('part/share'); ?>
 </div>
