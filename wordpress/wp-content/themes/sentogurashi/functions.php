@@ -21,7 +21,6 @@ function add_static_files() {
 }
 add_action('wp_enqueue_scripts', 'add_static_files');
 
-
 // メインセットアップ
 function theme_setup() {
   // メニューカスタマイズon
@@ -32,12 +31,6 @@ function theme_setup() {
 
   // titleタグ生成
   add_theme_support('title-tag');
-
-  // 画像サイズ固定
-  update_option('thumbnail_size_w', 600);
-  update_option('medium_size_w', 800);
-  update_option('large_size_w', 1600);
-  add_image_size('xlarge', 3200, false, false);
 }
 add_action('after_setup_theme', 'theme_setup');
 
@@ -112,17 +105,14 @@ add_filter('tiny_mce_before_init', 'override_mce_options');
 
 //画像挿入時の不要アトリビュート削除
 // https://pg.kdtk.net/834
-add_filter('image_send_to_editor', 'remove_image_attribute');
-add_filter('post_thumbnail_html', 'remove_image_attribute');
-function remove_image_attribute($html){
+add_filter('image_send_to_editor', 'remove_img_att');
+add_filter('post_thumbnail_html', 'remove_img_att');
+function remove_img_att($html){
   $html = preg_replace('/(width|height)="\d*"\s/', '', $html);
+  $html = preg_replace('/class=[\'"]([^\'"]+)[\'"]/i', '', $html);
   return $html;
 }
-add_filter('get_image_tag_class', 'remove_image_classname');
-function remove_image_classname($class) {
-  $class = preg_replace('/(alignnone|aligncenter|alignleft|alginright) /i', '', $class);
-  return $class;
-}
+
 
 /* ------------
   filter
@@ -206,35 +196,20 @@ function get_meta_description() {
     $description = category_description();
   }
   else if (is_single()) {
+    /*
     if ($post->post_excerpt) {
       // 記事ページでは、記事本文から抜粋を取得
       $description = $post->post_excerpt;
     } else {
+    */
     // post_excerpt で取れない時は、自力で記事の冒頭100文字を抜粋して取得
     $description = strip_tags($post->post_content);
     $description = strip_shortcodes($description);
     $description = str_replace("\n", '', $description);
     $description = str_replace("\r", '', $description);
     $description = mb_substr($description, 0, 100) . '…';
-    }
+    //}
   }
 
   return $description;
-}
-
-// 記事中使用画像のID list取得
-function get_idlist_of_article_images() {
-  global $post;
-  preg_match_all('/<img.+?class=".+?wp-image-(.+).*?".*?>/i', $post->post_content, $matches);
-  return $matches[1];
-}
-
-function build_image_list_data($imageIdList, $size = 'large') {
-  $imageList = [];
-  foreach ($imageIdList as $id) {
-    if(image_downsize($id, $size)) {
-      $imageList[$id] = image_downsize($id, $size)[0];
-    }
-  }
-  return $imageList;
 }
