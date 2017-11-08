@@ -9,7 +9,7 @@ if(have_posts()):
 <article class="Article">
 <?php if (has_post_thumbnail()) { ?>
   <div class="Article__photoWrapper">
-    <div class="Article__photoMain js-Article__photoMain" style="background-image:url('<?php echo wp_get_attachment_image_src(get_post_thumbnail_id(), 'large')[0] ?>')"></div>
+    <div class="Article__photoMain js-Article__photoMain" style="background-image:url('<?php echo get_the_post_thumbnail_url(false, 'large') ?>')"></div>
     <?php
     for ($i = 0; $i < 3 ; $i++) { ?>
       <canvas class="Wave__canvas Wave__canvas--<?php echo $i+1 ?> js-Wave__canvas--<?php echo $i+1 ?>"></canvas>
@@ -37,6 +37,17 @@ get_template_part('part/profile');
   </div>
 </article>
 
+<div style="display: none"; >
+<?php
+$normalImageList = build_image_list_data(get_idlist_of_article_images(), 'large');
+$articleImageList = [
+  'eyecatch' => get_the_post_thumbnail_url(false, 'xlarge'),
+  'normal' => $normalImageList
+];
+echo '<script>var articleImageList = ' . json_encode($articleImageList) . '</script>';
+?>
+</div>
+
 <?php
   endwhile;
 endif;
@@ -44,5 +55,6 @@ endif;
 
 <?php get_template_part('part/relatedArticles'); ?>
 
-<?php wp_enqueue_script('article-index-js', $static_assets_path . 'scripts/article-detail.bundle.js'); ?>
+<?php //wp_enqueue_script('article-detail-js', $static_assets_path . 'scripts/article-detail.bundle.js'); ?>
+<?php wp_enqueue_script('article-detail-js', '../../../sentogurashi-template/scripts/article-detail.bundle.js'); ?>
 <?php get_footer() ?>
