@@ -4,7 +4,7 @@
   </div>
   <div class="Profile__column Profile__column--right">
     <div class="Profile__role">執筆</div>
-    <p class="Profile__nameJp"><?php echo get_the_author_meta('last_name') . ' ' . get_the_author_meta('first_name'); ?></p>
+    <p class="Profile__nameJp"><a href="<?php echo get_author_posts_url(get_the_author_meta('ID')); ?>"><?php echo get_the_author_meta('last_name') . ' ' . get_the_author_meta('first_name'); ?></a></p>
     <div class="Profile__nameSub">
       <p class="Profile__nameEn"><?php echo strtoupper(get_the_author_meta('first_name_en') . ' ' . get_the_author_meta('last_name_en')); ?></p>
 <?php if(get_the_author_meta('job')) { ?>
