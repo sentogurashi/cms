@@ -4,8 +4,8 @@ $colorManager = new ColorManager();
 
 $relatedArticles = get_field('related_articles');
 if ($relatedArticles): ?>
-<aside class="RelatedArticles">
-<h2 class="RelatedArticles__title">あわせて読みたい</h2>
+<aside class="RelatedArticles Module">
+<h2 class="Module__heading">あわせて読みたい</h2>
 <ul class="CellList">
 <?php
   foreach($relatedArticles as $id):

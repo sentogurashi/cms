@@ -109,10 +109,14 @@ add_filter('image_send_to_editor', 'remove_img_att');
 add_filter('post_thumbnail_html', 'remove_img_att');
 function remove_img_att($html){
   $html = preg_replace('/(width|height)="\d*"\s/', '', $html);
-  $html = preg_replace('/class=[\'"]([^\'"]+)[\'"]/i', '', $html);
   return $html;
 }
 
+add_filter('get_image_tag_class', 'remove_image_classname');
+function remove_image_classname($class) {
+  $class = preg_replace('/(alignnone|aligncenter|alignleft|alginright) /i', '', $class);
+  return $class;
+}
 
 /* ------------
   filter
