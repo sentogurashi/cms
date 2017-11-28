@@ -27,6 +27,9 @@ if(have_posts()):
 
 <?php
   endwhile;
+?>
+  <!-- <div class="js-reactRoot"></div> -->
+<?php
 else:
 ?>
 <div class="Notice">

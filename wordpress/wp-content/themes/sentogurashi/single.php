@@ -41,5 +41,4 @@ endif;
 
 <?php get_template_part('part/relatedArticles'); ?>
 
-<?php wp_enqueue_script('article-index-js', $static_assets_path . 'scripts/article-detail.bundle.js'); ?>
 <?php get_footer() ?>
