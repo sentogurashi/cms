@@ -3,7 +3,7 @@
 
 <section class="AuthorPageProfile">
   <div class="AuthorPageProfile__photo" style="background-image: url('<?php echo get_wp_user_avatar_url(get_the_author_meta('ID')) ?>')"></div>
-  <p class="AuthorPageProfile__nameJp"><?php echo get_the_author_meta('last_name') . ' ' . get_the_author_meta('first_name'); ?></p>
+  <h1 class="AuthorPageProfile__nameJp"><?php echo get_the_author_meta('last_name') . ' ' . get_the_author_meta('first_name'); ?></h1>
   <div class="AuthorPageProfile__nameSub">
     <p class="AuthorPageProfile__nameEn"><?php echo strtoupper(get_the_author_meta('first_name_en') . ' ' . get_the_author_meta('last_name_en')); ?></p>
 <?php if(get_the_author_meta('job')) { ?>
