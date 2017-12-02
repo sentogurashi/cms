@@ -19,5 +19,4 @@
 <div class="SocialButtonContainer">
 <?php get_template_part('part/share'); ?>
 </div>
-<?php wp_enqueue_script('article-index-js', $static_assets_path . 'scripts/article-index.bundle.js'); ?>
 <?php get_footer(); ?>

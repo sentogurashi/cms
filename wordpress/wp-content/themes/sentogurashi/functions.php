@@ -1,5 +1,5 @@
 <?php
-$static_assets_path = 'http://www.sentogurashi.com/assets/';
+$static_assets_path = checkIsLocalServer() ? '../../../sentogurashi-template/' : 'http://www.sentogurashi.com/assets/';
 
 /* ------------
   base
@@ -14,6 +14,17 @@ function add_static_files() {
   // 絶対パスJS読み込み
   wp_enqueue_script( 'jquery', '//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js');
   wp_enqueue_script( 'theme-common', $static_assets_path . 'scripts/common.bundle.js');
+
+  if (is_home() || is_archive()) {
+    wp_enqueue_script('article-index-js', $static_assets_path . 'scripts/article-index.bundle.js');
+    wp_localize_script('article-index-js', 'WP_API_SETTINGS', [
+      'endpoint' => esc_url_raw(rest_url()),
+      'isHome' => is_home()
+    ]);
+  } elseif (is_single()) {
+    wp_enqueue_script('article-index-js', $static_assets_path . 'scripts/article-detail.bundle.js');
+  }
+
   // CSSの読み込み
   wp_enqueue_style( 'theme-common', $static_assets_path . 'styles/common.css');
   wp_enqueue_style( 'article',  $static_assets_path . 'styles/article.css');
@@ -216,4 +227,11 @@ function get_meta_description() {
   }
 
   return $description;
+}
+
+function checkIsLocalServer () {
+  // https://teratail.com/questions/37010
+  $S_AD = $_SERVER['SERVER_ADDR'];
+  $R_AD = $_SERVER['REMOTE_ADDR'];
+  return (substr($S_AD,0,mb_strrpos($S_AD,'.')) === substr($R_AD,0,mb_strrpos($R_AD,'.')));
 }
