@@ -1,4 +1,5 @@
 <?php
+require_once(dirname(__FILE__) . '/logic/shortcode.php');
 $static_assets_path = checkIsLocalServer() ? '../../../sentogurashi-template/' : 'http://www.sentogurashi.com/assets/';
 
 /* ------------
@@ -45,27 +46,6 @@ function theme_setup() {
 }
 add_action('after_setup_theme', 'theme_setup');
 
-/* ------------
-  shortcode
- ------------ */
-// 画像ラッパー
-function image_wrap($atts, $content) {
-
-  extract(shortcode_atts([
-    'caption' => ''
-  ], $atts));
-
-  $wrapped_tag = '<div class="Article__innerImage">' . $content;
-
-  if($caption !== '') {
-    $wrapped_tag .= '<cite class="Article__caption">' . esc_html($caption) . '</cite>';
-  }
-
-  $wrapped_tag .= '</div>';
-
-  return $wrapped_tag;
-}
-add_shortcode('image_wrap', 'image_wrap');
 
 /* ------------
   disables
