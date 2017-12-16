@@ -17,11 +17,32 @@ function add_static_files() {
   wp_enqueue_script( 'theme-common', $static_assets_path . 'scripts/common.bundle.js');
 
   if (is_home() || is_archive()) {
+
+    $taxonomyType = '';
+    $taxonomyId = '';
+
+    if (is_home()) {
+      $taxonomyType = 'home';
+    } else if (is_category()) {
+      $taxonomyType = 'category';
+      $taxonomyId = get_query_var('cat');
+    } else if (is_tag()) {
+      $taxonomyType = 'tag';
+      $taxonomyId = get_query_var('tag_id');
+    } else if (is_author()) {
+      $taxonomyType = 'author';
+      $taxonomyId = get_query_var('author');
+    }
+
+
     wp_enqueue_script('article-index-js', $static_assets_path . 'scripts/article-index.bundle.js');
     wp_localize_script('article-index-js', 'WP_API_SETTINGS', [
-      'endpoint' => esc_url_raw(rest_url()),
-      'isHome' => is_home()
+      //'endpoint' => ,
+      'endpoint' => checkIsLocalServer() ? (esc_url_raw(substr(site_url(), 0, strrpos(site_url(), '/')) . '/api/wp_proxy.php')) : 'http://sentogurashi.com/article/api/wp_proxy.php',
+      'type' => $taxonomyType,
+      'id' => $taxonomyId
     ]);
+
   } elseif (is_single()) {
     wp_enqueue_script('article-index-js', $static_assets_path . 'scripts/article-detail.bundle.js');
   }
@@ -215,3 +236,37 @@ function checkIsLocalServer () {
   $R_AD = $_SERVER['REMOTE_ADDR'];
   return (substr($S_AD,0,mb_strrpos($S_AD,'.')) === substr($R_AD,0,mb_strrpos($R_AD,'.')));
 }
+
+
+// REST API向けタグ出力
+function register_tags_to_restapi_response() {
+  register_rest_field('post',
+    'tag_list',
+    array(
+      'get_callback' => 'get_tags_for_restapi'
+    )
+  );
+}
+
+function get_tags_for_restapi( $object ) {
+  return get_the_tags();
+}
+
+add_action('rest_api_init', 'register_tags_to_restapi_response');
+
+
+// REST API向けカテゴリ出力
+function register_categories_to_restapi_response() {
+  register_rest_field('post',
+    'category_list',
+    array(
+      'get_callback' => 'get_categories_for_restapi'
+    )
+  );
+}
+
+function get_categories_for_restapi( $object ) {
+  return get_the_category();
+}
+
+add_action('rest_api_init', 'register_categories_to_restapi_response');

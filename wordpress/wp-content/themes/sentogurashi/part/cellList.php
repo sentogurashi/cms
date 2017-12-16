@@ -2,7 +2,7 @@
 require_once(dirname(__FILE__) . '/../logic/colorManager.php');
 $colorManager = new ColorManager();
 ?>
-<ul class="CellList">
+<ul class="CellList js-CellList">
 <?php
 if(have_posts()):
   while(have_posts()):
@@ -39,4 +39,25 @@ else:
 endif;
 ?>
 </ul>
+
 <!-- /.CellList -->
+
+<script type="text/x-template" class="js-template-Cell">
+  <li class="Cell is-added">
+    <a href="<%= link %>">
+      <div class="Cell__thumbNail" style="background-image:url('<%= thumbnail %>')"></div>
+      <div class="Cell__main">
+<% categories.map((category) => { %>
+        <p class="Cell__category Cell__category--<%= category.slug %>"><%= category.name %></p>
+<% }) %>
+        <p class="Cell__title"><%= title %></p>
+        <p class="Cell__date"><%= formattedDate %></p>
+      </div>
+    </a>
+    <ul class="Cell__tags">
+<% tags.map((tag) => { %>
+      <li><a href="./tags/<%= encodeURIComponent(tag) %>"><%= tag %></a></li>
+<% }) %>
+    </ul>
+  </li>
+</script>
