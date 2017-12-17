@@ -56,7 +56,7 @@ endif;
     </a>
     <ul class="Cell__tags">
 <% tags.map((tag) => { %>
-      <li><a href="./tags/<%= encodeURIComponent(tag) %>"><%= tag %></a></li>
+      <li><a href="./tag/<%= encodeURIComponent(tag) %>"><%= tag %></a></li>
 <% }) %>
     </ul>
   </li>
