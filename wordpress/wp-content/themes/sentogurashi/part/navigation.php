@@ -2,11 +2,11 @@
   <a href="/" class="Navigation__sitelogo">銭湯ぐらし</a>
   <ul class="Navigation__main">
     <li><a href="/article">読みもの</a></li>
-    <li><a href="/about/project.html">銭湯ぐらしとは</a></li>
+    <li><a href="/archive/about/project.html">銭湯ぐらしとは</a></li>
   </ul>
   <div class="Navigation__bottom">
 <ul class="Navigation__sub">
-  <li><a href="/about/kosugiyu.html">小杉湯</a></li>
+  <li><a href="/archive/about/kosugiyu.html">小杉湯</a></li>
   <li><a class="js-info" href="" target="_blank">お問い合わせ</a></li>
 </ul>
 <ul class="Navigation__sns">
@@ -27,10 +27,10 @@
   <a href="/" class="Navigation__sitelogo">銭湯ぐらし</a>
   <ul class="Navigation__main">
     <li><a href="/article">読みもの</a></li>
-    <li><a href="/about/project.html">銭湯ぐらしとは</a></li>
+    <li><a href="/archive/about/project.html">銭湯ぐらしとは</a></li>
   </ul>
 <ul class="Navigation__sub">
-  <li><a href="/about/kosugiyu.html">小杉湯</a></li>
+  <li><a href="/archive/about/kosugiyu.html">小杉湯</a></li>
   <li><a class="js-info" href="" target="_blank">お問い合わせ</a></li>
 </ul>
 <ul class="Navigation__sns">
