@@ -1,6 +1,6 @@
 <?php
 require_once(dirname(__FILE__) . '/logic/shortcode.php');
-$static_assets_path = checkIsLocalServer() ? '../../../sentogurashi-template/' : 'http://www.sentogurashi.com/assets/';
+$static_assets_path = checkIsLocalServer() ? '../../../sentogurashi-template/' : 'http://www.sentogurashi.com/archive/assets/';
 
 /* ------------
   base
