@@ -2,7 +2,7 @@
   <a href="/" class="Navigation__sitelogo">銭湯ぐらし</a>
   <ul class="Navigation__main">
     <li><a href="/article">読みもの</a></li>
-    <li><a href="/archive/about/project.html">銭湯ぐらしとは</a></li>
+    <li><a href="/about">銭湯ぐらしとは</a></li>
   </ul>
   <div class="Navigation__bottom">
 <ul class="Navigation__sub">
